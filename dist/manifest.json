@@ -1,0 +1,12 @@
+{
+  "name": "広告視聴時間カウンター",
+  "description": "研究用",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch?v=*"],
+      "js": ["main.js"]
+    }
+  ]
+}
