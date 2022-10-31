@@ -1,8 +1,8 @@
-const initObserver = (
-  target: Element,
+const initObserver = <T extends Element>(
+  target: T,
   watchClassName: string,
-  classAdded: (element: Element) => void,
-  classRemoved: (element: Element) => void
+  classAdded: (element: T) => void,
+  classRemoved: (element: T) => void
 ) => {
   let classState = false;
   const callback: MutationCallback = (mutationsList) => {
@@ -11,7 +11,7 @@ const initObserver = (
         mutation.type === "attributes" &&
         mutation.attributeName === "class"
       ) {
-        const target = mutation.target as HTMLDivElement;
+        const target = mutation.target as T;
         let isContainClass = target.classList.contains(watchClassName);
         if (classState !== isContainClass) {
           classState = isContainClass;
@@ -32,19 +32,19 @@ const initObserver = (
 };
 
 let shownAt: Date | null = null;
-const onShownAd = (target: Element) => {
+const onShownAd = (target: HTMLDivElement) => {
   console.log("showing ad");
   shownAt = new Date();
 };
 
-const onHiddenAd = (target: Element) => {
+const onHiddenAd = (target: HTMLDivElement) => {
   console.log("end ad");
   console.log(`${Date.now() - shownAt!.getTime()} millisec passed`);
   shownAt = null;
 };
 
-const onPausedAd = (target: Element) => {};
-const onPlayedAd = (target: Element) => {};
+const onPausedAd = (target: HTMLDivElement) => {};
+const onPlayedAd = (target: HTMLDivElement) => {};
 
 // main
 const container = document.querySelector<HTMLDivElement>(".html5-video-player");
