@@ -1,8 +1,8 @@
-const initObserver = <T extends Element>(
+const initClassObserver = <T extends Element>(
   target: T,
   watchClassName: string,
-  classAdded: (element: T) => void,
-  classRemoved: (element: T) => void
+  onClassAdded: (element: T) => void,
+  onClassRemoved: (element: T) => void
 ) => {
   let classState = false;
   const callback: MutationCallback = (mutationsList) => {
@@ -16,9 +16,9 @@ const initObserver = <T extends Element>(
         if (classState !== isContainClass) {
           classState = isContainClass;
           if (isContainClass) {
-            classAdded(target);
+            onClassAdded(target);
           } else {
-            classRemoved(target);
+            onClassRemoved(target);
           }
         }
       }
@@ -49,7 +49,7 @@ const onPlayedAd = (target: HTMLDivElement) => {};
 // main
 const container = document.querySelector<HTMLDivElement>(".html5-video-player");
 if (container) {
-  const adShowObserver = initObserver(
+  const adShowObserver = initClassObserver(
     container,
     "ad-showing",
     onShownAd,
@@ -57,7 +57,7 @@ if (container) {
   );
   adShowObserver.observe();
 
-  const adPauseObserber = initObserver(
+  const adPauseObserber = initClassObserver(
     container,
     "paused-mode",
     onPausedAd,
