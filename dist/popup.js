@@ -1,5 +1,5 @@
 const showValue = async () => {
-  const msg = await chrome.storage.local.get("data");
+  const msg = await chrome.storage.local.get();
   console.log(msg);
 };
 

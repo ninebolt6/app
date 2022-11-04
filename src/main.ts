@@ -48,6 +48,17 @@ const onHiddenAd = (target: HTMLDivElement) => {
     onPlayedAd(target);
   }
   console.log(`${timePassed - pausedDuration} millisec watched`);
+
+  // save
+  chrome.storage.local.set({
+    [Date.now()]: {
+      watchStartedAt: shownAt?.getTime(),
+      totalTimePassed: timePassed,
+      timePaused: pausedDuration,
+      timeWatched: timePassed - pausedDuration,
+    },
+  });
+
   shownAt = null;
   pausedDuration = 0;
 };
