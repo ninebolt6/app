@@ -88,8 +88,8 @@ const adPauseObserber = initClassObserver(
 );
 
 var old_url = "";
-var mutationObserver = new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
+var urlChangeObserver = new MutationObserver((mutations) => {
+  mutations.forEach(() => {
     if (location.href != old_url) {
       old_url = location.href;
 
@@ -98,13 +98,15 @@ var mutationObserver = new MutationObserver(function (mutations) {
         ".html5-video-player"
       );
       if (container) {
+        // update observe target
         adShowObserver.observe(container);
         adPauseObserber.observe(container);
       }
     }
   });
 });
-mutationObserver.observe(document.documentElement, {
+
+urlChangeObserver.observe(document.documentElement, {
   childList: true,
   subtree: true,
 });
