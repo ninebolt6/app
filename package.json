@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "esbuild ./src/main.ts --outfile=./dist/main.js --minify"
+    "build": "esbuild ./src/main.ts ./src/popup.ts --outdir=./dist --minify"
   },
   "license": "UNLICENSED",
   "dependencies": {

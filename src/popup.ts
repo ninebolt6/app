@@ -9,9 +9,9 @@ const clearValue = async () => {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".show").addEventListener("click", showValue);
+  document.querySelector(".show")!.addEventListener("click", showValue);
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".clear").addEventListener("click", clearValue);
+  document.querySelector(".clear")!.addEventListener("click", clearValue);
 });
