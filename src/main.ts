@@ -1,5 +1,4 @@
 const initClassObserver = <T extends Element>(
-  target: T,
   watchClassName: string,
   onClassAdded: (element: T) => void,
   onClassRemoved: (element: T) => void
@@ -25,9 +24,12 @@ const initClassObserver = <T extends Element>(
     }
   };
   const observer = new MutationObserver(callback);
+  const observe = (target: T) => {
+    observer.observe(target, { attributes: true });
+  };
 
   return {
-    observe: () => observer.observe(target, { attributes: true }),
+    observe,
   };
 };
 
@@ -59,8 +61,7 @@ const onHiddenAd = (target: HTMLDivElement) => {
     },
   });
 
-  shownAt = null;
-  pausedDuration = 0;
+  resetState();
 };
 
 const onPausedAd = (_target: HTMLDivElement) => {
@@ -79,23 +80,41 @@ const onPlayedAd = (_target: HTMLDivElement) => {
   }
 };
 
-// main
-console.log("yt-adtime loaded");
-const container = document.querySelector<HTMLDivElement>(".html5-video-player");
-if (container) {
-  const adShowObserver = initClassObserver(
-    container,
-    "ad-showing",
-    onShownAd,
-    onHiddenAd
-  );
-  adShowObserver.observe();
+const resetState = () => {
+  shownAt = null;
+  pausedAt = null;
+  pausedDuration = 0;
+};
 
-  const adPauseObserber = initClassObserver(
-    container,
-    "paused-mode",
-    onPausedAd,
-    onPlayedAd
-  );
-  adPauseObserber.observe();
-}
+const adShowObserver = initClassObserver("ad-showing", onShownAd, onHiddenAd);
+const adPauseObserber = initClassObserver(
+  "paused-mode",
+  onPausedAd,
+  onPlayedAd
+);
+
+var old_url = "";
+var mutationObserver = new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    if (location.href != old_url) {
+      old_url = location.href;
+      console.log("URL was changed");
+
+      resetState();
+      const container = document.querySelector<HTMLDivElement>(
+        ".html5-video-player"
+      );
+      console.log(container);
+      if (container) {
+        adShowObserver.observe(container);
+        adPauseObserber.observe(container);
+      }
+    }
+  });
+});
+mutationObserver.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+});
+
+console.log("yt-adtime loaded");

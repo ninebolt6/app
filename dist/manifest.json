@@ -6,9 +6,9 @@
   "permissions": ["storage"],
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/watch?v=*"],
+      "matches": ["https://www.youtube.com/*"],
       "js": ["main.js"],
-      "all_frames": true
+      "run_at": "document_idle"
     }
   ],
   "action": {
