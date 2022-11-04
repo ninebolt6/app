@@ -32,21 +32,44 @@ const initClassObserver = <T extends Element>(
 };
 
 let shownAt: Date | null = null;
-const onShownAd = (target: HTMLDivElement) => {
+let pausedAt: Date | null = null;
+let pausedDuration = 0;
+const onShownAd = (_target: HTMLDivElement) => {
   console.log("showing ad");
   shownAt = new Date();
+  pausedAt = null;
 };
 
 const onHiddenAd = (target: HTMLDivElement) => {
   console.log("end ad");
-  console.log(`${Date.now() - shownAt!.getTime()} millisec passed`);
+  const timePassed = Date.now() - shownAt!.getTime();
+  console.log(`${timePassed} millisec passed`);
+  if (pausedAt) {
+    onPlayedAd(target);
+  }
+  console.log(`${timePassed - pausedDuration} millisec watched`);
   shownAt = null;
+  pausedDuration = 0;
 };
 
-const onPausedAd = (target: HTMLDivElement) => {};
-const onPlayedAd = (target: HTMLDivElement) => {};
+const onPausedAd = (_target: HTMLDivElement) => {
+  if (shownAt) {
+    console.log("start pause");
+    pausedAt = new Date();
+  }
+};
+const onPlayedAd = (_target: HTMLDivElement) => {
+  if (pausedAt) {
+    console.log("end pause");
+    const timePaused = Date.now() - pausedAt.getTime();
+    pausedDuration += timePaused;
+    console.log({ timePaused, pausedDuration });
+    pausedAt = null;
+  }
+};
 
 // main
+console.log("yt-adtime loaded");
 const container = document.querySelector<HTMLDivElement>(".html5-video-player");
 if (container) {
   const adShowObserver = initClassObserver(
