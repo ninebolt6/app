@@ -37,19 +37,15 @@ let shownAt: Date | null = null;
 let pausedAt: Date | null = null;
 let pausedDuration = 0;
 const onShownAd = (_target: HTMLDivElement) => {
-  console.log("showing ad");
   shownAt = new Date();
   pausedAt = null;
 };
 
 const onHiddenAd = (target: HTMLDivElement) => {
-  console.log("end ad");
   const timePassed = Date.now() - shownAt!.getTime();
-  console.log(`${timePassed} millisec passed`);
   if (pausedAt) {
     onPlayedAd(target);
   }
-  console.log(`${timePassed - pausedDuration} millisec watched`);
 
   // save
   chrome.storage.local.set({
@@ -66,13 +62,11 @@ const onHiddenAd = (target: HTMLDivElement) => {
 
 const onPausedAd = (_target: HTMLDivElement) => {
   if (shownAt) {
-    console.log("start pause");
     pausedAt = new Date();
   }
 };
 const onPlayedAd = (_target: HTMLDivElement) => {
   if (pausedAt) {
-    console.log("end pause");
     const timePaused = Date.now() - pausedAt.getTime();
     pausedDuration += timePaused;
     console.log({ timePaused, pausedDuration });
@@ -98,13 +92,11 @@ var mutationObserver = new MutationObserver(function (mutations) {
   mutations.forEach(function (mutation) {
     if (location.href != old_url) {
       old_url = location.href;
-      console.log("URL was changed");
 
       resetState();
       const container = document.querySelector<HTMLDivElement>(
         ".html5-video-player"
       );
-      console.log(container);
       if (container) {
         adShowObserver.observe(container);
         adPauseObserber.observe(container);
