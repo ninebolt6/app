@@ -27,7 +27,7 @@ const downloadData = async () => {
 
   const anchor = document.createElement("a");
   anchor.setAttribute("href", url);
-  anchor.setAttribute("download", "log.txt");
+  anchor.setAttribute("download", "log.json");
 
   const mouseEvent = new MouseEvent("click", {
     bubbles: true,
