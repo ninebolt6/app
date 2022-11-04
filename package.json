@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "esbuild ./src/main.ts --outfile=./dist/main.js"
+    "build": "esbuild ./src/main.ts --outfile=./dist/main.js --minify"
   },
   "license": "UNLICENSED",
   "dependencies": {
