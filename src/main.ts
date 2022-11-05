@@ -35,10 +35,17 @@ const initClassObserver = <T extends Element>(
 
 let shownAt: Date | null = null;
 let pausedAt: Date | null = null;
+let originalDuration: string | null = null;
 let pausedDuration = 0;
 const onShownAd = (_target: HTMLDivElement) => {
   shownAt = new Date();
   pausedAt = null;
+  const span = document.querySelector<HTMLSpanElement>(
+    ".ytd-watch-flexy .ytp-time-duration"
+  );
+  if (span) {
+    originalDuration = span.textContent ?? null;
+  }
 };
 
 const onHiddenAd = (target: HTMLDivElement) => {
@@ -54,6 +61,7 @@ const onHiddenAd = (target: HTMLDivElement) => {
       totalTimePassed: timePassed,
       timePaused: pausedDuration,
       timeWatched: timePassed - pausedDuration,
+      originalDuration: originalDuration,
     },
   });
 
@@ -77,6 +85,7 @@ const onPlayedAd = (_target: HTMLDivElement) => {
 const resetState = () => {
   shownAt = null;
   pausedAt = null;
+  originalDuration = null;
   pausedDuration = 0;
 };
 

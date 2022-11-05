@@ -3,6 +3,7 @@ interface AdWatchData {
   totalTimePassed: number;
   timePaused: number;
   timeWatched: number;
+  originalDuration: string;
 }
 
 interface StorageData {
@@ -10,7 +11,7 @@ interface StorageData {
 }
 
 const showValue = async () => {
-  const msg = await chrome.storage.local.get();
+  const msg: StorageData = await chrome.storage.local.get();
   console.log(msg);
 };
 
